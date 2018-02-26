@@ -2,7 +2,7 @@ from RiotAPI import RiotAPI
 from LocalStatic import LocalStatic
 
 def main():
-    api = RiotAPI('RGAPI-3edb455b-f18d-4460-a0c2-bd41f3eaa1a0')
+    api = RiotAPI('')
 
     #ls = LocalStatic(api.get_champions_by_id_list())
 
