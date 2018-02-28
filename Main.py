@@ -1,49 +1,57 @@
 from RiotAPI import RiotAPI
 from LocalStatic import LocalStatic
+import datetime
+import RiotConstants
+import PrivateData
+import ChampionList
+
+epoch = datetime.datetime.utcfromtimestamp(0)
+
 
 def main():
-    api = RiotAPI('RGAPI-3edb455b-f18d-4460-a0c2-bd41f3eaa1a0')
-
-    #ls = LocalStatic(api.get_champions_by_id_list())
-
-    #s1_name = "metaleaguesystem"
-    #s1= api.get_summoner_by_name('metaleaguesystem')
-    s1_id = 71460630
-    print(s1_id)
-    print(LocalStatic.get_champion_by_id('202'))
-    print(LocalStatic.get_champion_name_by_id("202"))
-    sChamps = api.get_champion_masteries_by_summoner_id(s1_id)
+    api = RiotAPI(PrivateData.RiotAPIKey)
+    s1 = PrivateData.meta
+    # s1_id = 71460630
+    #print(s1)
+    # ls = LocalStatic(api.get_champions_by_id_list())
+    ls = LocalStatic(ChampionList.list)
+    print("===")
 
     '''
-    {'championPointsSinceLastLevel': 147023,
-    'playerId': 71460630,
-    'championPointsUntilNextLevel': 0,
-    'chestGranted': True,
-    'tokensEarned': 0,
-    'championPoints': 168623,
-    'championLevel': 7,
-    'lastPlayTime': 1516487394000,
-    'championId': 268}
-    '''
-
+    sChamps = api.get_champion_masteries_by_summoner_id(s1['id'])
     chest_champs = []
     for champ in sChamps:
         if champ['chestGranted']:
-            chest_champs.append(LocalStatic.get_champion_name_by_id(str(champ['championId'])))
-    print(chest_champs)
+            chest_champs.append(ls.get_champion_name_by_id(str(champ['championId'])))
+    print("Chest granted on: ", chest_champs)
+    '''
 
-    #top_champ = sChamps[0]
-    #print(top_champ)
-    #print(top_champ['championId'])
-    #top_champ_name=api.get_champion_by_id(top_champ['championId'])['key']
-    #print(top_champ_name)
+    milli_secs_per_week = 1000 * 60 * 60 * 24 * 7
+
+    end_time_dt = datetime.datetime.now()
+    week_td = datetime.timedelta(weeks=1)
+
+    first_rot_dt = datetime.datetime(year=2018, month=2, day=27)
+    beginTime = int((unix_time_millis(first_rot_dt)))
+    print (beginTime)
+    matches = api.request(RiotConstants.URL[
+                              'matchlist_by_account_id'].format(account_id=s1['accountId']),
+                          {'beginTime':int(unix_time_millis(first_rot_dt))})
+
+    owned_champs = []
 
 
-    #print("The champ with most mastery points for the player ", s1_name, " is: ", top_champ_name , " with ", top_champ['championPoints'], " points")
+    for match in matches['matches']:
+        t_champ = api.request(RiotConstants.URL['champion_by_id_dynamic'].format(id=match['champion']))
+        t_champ_name = ls.get_champion_name_by_id(t_champ['id'])
+        if (not t_champ['freeToPlay']):
+            owned_champs.append(t_champ_name)
 
+    print ("===")
+    print(owned_champs)
 
-    #r = api.get_summoner_by_name('metaleaguesystem')
-    #print(r)
+def unix_time_millis(dt):
+    return (dt - epoch).total_seconds() * 1000.0
 
 
 if __name__ == "__main__":
