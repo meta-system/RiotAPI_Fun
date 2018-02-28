@@ -286,6 +286,7 @@ list = {
         },
         "51": {
             "title": "the Sheriff of Piltover",
+            "title": "the Sheriff of Piltover",
             "id": 51,
             "key": "Caitlyn",
             "name": "Caitlyn"
