@@ -14,11 +14,11 @@ ls = LocalStatic(ChampionList.list["data"])
 
 def main():
 
-    #s1 = api.get_summoner_by_name(input("Please enter League Account Name"))
-    #key = input("Please enter RiotAPI key")
+    s1 = api.get_summoner_by_name(input("Please enter League Account Name"))
+    key = input("Please enter RiotAPI key")
 
-    s1 = PrivateData.meta
-    key = PrivateData.RiotAPIKey
+    #s1 = PrivateData.meta
+    #key = PrivateData.RiotAPIKey
 
 
     #ls = LocalStatic(api.get_champions_by_id_list())
