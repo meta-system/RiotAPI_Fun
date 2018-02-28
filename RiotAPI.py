@@ -7,20 +7,21 @@ class RiotAPI(object):
         self.api_key = api_key
         self.region = region
 
-    def _request(self, url_core, params={}):
+    def request(self, url_core, params={}):
         args = {'api_key': self.api_key}
         for key, value in params.items():
             if key not in args:
                 args[key] = value
-        response = requests.get(
-            Consts.URL['base'].format(
+        url = Consts.URL['base'].format(
                 proxy=self.region,
                 region=self.region,
                 core=url_core,
                 api_key=self.api_key
-            ),
+         )
+        response = requests.get(url,
             params=args
         )
+        #print(response.url)
         return response.json()
 
     def get_summoner_by_name(self, summonerName):
@@ -28,21 +29,21 @@ class RiotAPI(object):
             summonerName=summonerName,
             sign='?'
         )
-        return self._request(url_core)
+        return self.request(url_core)
 
     def get_champion_masteries_by_summoner_id(self, id):
         url_core = Consts.URL['champion_masteries'].format(
             summonerID=id,
             sign='?'
         )
-        return self._request(url_core)
+        return self.request(url_core)
 
     def get_champion_by_id(self, champID):
-        url_core = Consts.URL['champion_name_by_id'].format(
+        url_core = Consts.URL['champion_by_id'].format(
             id=champID
         )
-        return self._request(url_core)
+        return self.request(url_core)
 
     def get_champions_by_id_list(self):
         core = Consts.URL['champions_by_id_list'].format(sign='&')
-        return self._request(core)
+        return self.request(core)
