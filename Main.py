@@ -22,9 +22,8 @@ def main():
     chest_champs = []
     for champ in sChamps:
         if champ['chestGranted']:
-            chest_champs.append(ls.get_champion_name_by_id(str(champ['championId'])))
-    print("Chest granted on: ", chest_champs)
-    '''
+            chest_champs.append(LocalStatic.get_champion_name_by_id(str(champ['championId'])))
+    print(chest_champs)
 
     milli_secs_per_week = 1000 * 60 * 60 * 24 * 7
 
